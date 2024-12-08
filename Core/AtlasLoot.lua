@@ -1353,7 +1353,7 @@ function AtlasLoot_ShowItemsFrame(dataID, dataSource, boss, pFrame)
 				end
 				itemButton.droprate = nil;
 				if (dataID == "SearchResult" or dataID == "WishList") and dataSource[dataID][i][5] then
-					local wishDataID, wishDataSource = strsplit("|", dataSource[dataID][i][5])
+					local wishDataID, wishDataSource = AtlasLoot_strsplit("|", dataSource[dataID][i][5])
 					if wishDataSource == "AtlasLootRepItems" then
 						--Set prices for items, up to 5 different currencies can be used in combination
 						if wishDataID and AtlasLoot_IsLootTableAvailable(wishDataID) then
@@ -2161,7 +2161,7 @@ function AtlasLootMinimapButton_SetPosition(v)
 	AtlasLootMinimapButton_UpdatePosition();
 end
 
-function strsplit(delim, str, maxNb, onlyLast)
+function AtlasLoot_strsplit(delim, str, maxNb, onlyLast)
 	-- Eliminate bad cases...
 	if string.find(str, delim) == nil then
 		return { str }
@@ -3725,10 +3725,10 @@ function AtlasLootItem_OnClick(arg1)
 			elseif AtlasLootItemsFrame.refresh[1] == "SearchResult" then
 				AtlasLoot_AddToWishlist(AtlasLoot:GetOriginalDataFromSearchResult(this.itemID));
 			else
-				AtlasLoot_AddToWishlist(this.itemID, strsplit("\\", getglobal("AtlasLootItem_"..this:GetID().."_Icon"):GetTexture(), 0, true), this.itemIDName, this.itemIDExtra, AtlasLootItemsFrame.refresh[1].."|"..AtlasLootItemsFrame.refresh[2]);
+				AtlasLoot_AddToWishlist(this.itemID, AtlasLoot_strsplit("\\", getglobal("AtlasLootItem_"..this:GetID().."_Icon"):GetTexture(), 0, true), this.itemIDName, this.itemIDExtra, AtlasLootItemsFrame.refresh[1].."|"..AtlasLootItemsFrame.refresh[2]);
 			end
 		elseif((AtlasLootItemsFrame.refresh[1] == "SearchResult" or AtlasLootItemsFrame.refresh[1] == "WishList") and this.sourcePage) then
-			local dataID, dataSource = strsplit("|", this.sourcePage);
+			local dataID, dataSource = AtlasLoot_strsplit("|", this.sourcePage);
 			if(dataID and dataSource and AtlasLoot_IsLootTableAvailable(dataID)) then
 				AtlasLoot_ShowItemsFrame(dataID, dataSource, AtlasLoot_TableNames[dataID][1], AtlasLootItemsFrame.refresh[4]);
 			end
@@ -3746,12 +3746,12 @@ function AtlasLootItem_OnClick(arg1)
 			elseif AtlasLootItemsFrame.refresh[1] == "SearchResult" then
 				AtlasLoot_AddToWishlist(AtlasLoot:GetOriginalDataFromSearchResult(this.itemID));
 			else
-				AtlasLoot_AddToWishlist(this.itemID, strsplit("\\", getglobal("AtlasLootItem_"..this:GetID().."_Icon"):GetTexture(), 0, true), this.itemIDName, this.itemIDExtra, AtlasLootItemsFrame.refresh[1].."|"..AtlasLootItemsFrame.refresh[2]);
+				AtlasLoot_AddToWishlist(this.itemID, AtlasLoot_strsplit("\\", getglobal("AtlasLootItem_"..this:GetID().."_Icon"):GetTexture(), 0, true), this.itemIDName, this.itemIDExtra, AtlasLootItemsFrame.refresh[1].."|"..AtlasLootItemsFrame.refresh[2]);
 			end
 		elseif(IsControlKeyDown()) then
 			DressUpItemLink("item:"..this.dressingroomID..":0:0:0");
 		elseif((AtlasLootItemsFrame.refresh[1] == "SearchResult" or AtlasLootItemsFrame.refresh[1] == "WishList") and this.sourcePage) then
-			local dataID, dataSource = strsplit("|", this.sourcePage);
+			local dataID, dataSource = AtlasLoot_strsplit("|", this.sourcePage);
 			if(dataID and dataSource and AtlasLoot_IsLootTableAvailable(dataID)) then
 				AtlasLoot_ShowItemsFrame(dataID, dataSource, AtlasLootItemsFrame.refresh[3], AtlasLootItemsFrame.refresh[4]);
 			end
@@ -3811,12 +3811,12 @@ function AtlasLootItem_OnClick(arg1)
 			elseif AtlasLootItemsFrame.refresh[1] == "SearchResult" then
 				AtlasLoot_AddToWishlist(AtlasLoot:GetOriginalDataFromSearchResult(this.itemID));
 			else
-				AtlasLoot_AddToWishlist(this.itemID, strsplit("\\", getglobal("AtlasLootItem_"..this:GetID().."_Icon"):GetTexture(), 0, true), this.itemIDName, this.itemIDExtra, AtlasLootItemsFrame.refresh[1].."|"..AtlasLootItemsFrame.refresh[2]);
+				AtlasLoot_AddToWishlist(this.itemID, AtlasLoot_strsplit("\\", getglobal("AtlasLootItem_"..this:GetID().."_Icon"):GetTexture(), 0, true), this.itemIDName, this.itemIDExtra, AtlasLootItemsFrame.refresh[1].."|"..AtlasLootItemsFrame.refresh[2]);
 			end
 		elseif(IsControlKeyDown()) then
 			DressUpItemLink("item:"..this.dressingroomID..":0:0:0");
 		elseif((AtlasLootItemsFrame.refresh[1] == "SearchResult" or AtlasLootItemsFrame.refresh[1] == "WishList") and this.sourcePage) then
-			local dataID, dataSource = strsplit("|", this.sourcePage);
+			local dataID, dataSource = AtlasLoot_strsplit("|", this.sourcePage);
 			if(dataID and dataSource and AtlasLoot_IsLootTableAvailable(dataID)) then
 				AtlasLoot_ShowItemsFrame(dataID, dataSource, AtlasLootItemsFrame.refresh[3], AtlasLootItemsFrame.refresh[4]);
 			end
@@ -3995,8 +3995,8 @@ function AtlasLoot_GetChatLink(id)
 	return "\124"..e.."\124H"..b.."\124h["..a.."]\124h\124r"
 end
 
---pfUI.api.strsplit
-local function AtlasLoot_strsplit(delimiter, subject)
+--pfUI.api.AtlasLoot_strsplit
+local function strsplit(delimiter, subject)
   if not subject then return nil end
   local delimiter, fields = delimiter or ":", {}
   local pattern = string.format("([^%s]+)", delimiter)
@@ -4005,7 +4005,7 @@ local function AtlasLoot_strsplit(delimiter, subject)
 end
 
 --Update announcing code taken from pfUI
-local major, minor, fix = AtlasLoot_strsplit(".", tostring(GetAddOnMetadata("AtlasLoot", "Version")))
+local major, minor, fix = strsplit(".", tostring(GetAddOnMetadata("AtlasLoot", "Version")))
 
 local alreadyshown = false
 local localversion  = tonumber(major*10000 + minor*100 + fix)
@@ -4025,7 +4025,7 @@ PlayerCounter = {}
 
 AtlasLoot_updater:SetScript("OnEvent", function()
 	if event == "CHAT_MSG_ADDON" and arg1 == "AtlasLoot" then
-		local v, remoteversion, remotetitle = AtlasLoot_strsplit(":", arg2)
+		local v, remoteversion, remotetitle = strsplit(":", arg2)
 		local _,title = GetAddOnInfo("AtlasLoot")
 		local remoteversion = tonumber(remoteversion)
 		if remoteversion >= 40000 then remoteversion = 0 end --Block for people using some version from another version of WoW.
@@ -4055,7 +4055,7 @@ AtlasLoot_updater:SetScript("OnEvent", function()
 		end
 		if not name then return end
 		if string.upper(name) == "LFT" then
-			local msg, v, remoteversion, remotetitle = AtlasLoot_strsplit(":", arg1)
+			local msg, v, remoteversion, remotetitle = strsplit(":", arg1)
 			if msg == "Atlasloot" then
 				local remoteversion = tonumber(remoteversion) or 0
 				local _,title = GetAddOnInfo("AtlasLoot")
