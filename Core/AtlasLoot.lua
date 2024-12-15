@@ -1467,12 +1467,17 @@ function AtlasLoot_ShowItemsFrame(dataID, dataSource, boss, pFrame)
 					end
 
 					if wishDataSource == "AtlasLootItems" then
-						--Set drop rate
+						--Set drop rate and boss
 						if wishDataID and AtlasLoot_IsLootTableAvailable(wishDataID) then
 							for _, v in ipairs(AtlasLoot_Data[wishDataSource][wishDataID]) do
 								if dataSource[dataID][i][1] == v[1] then
 									if v[5] then
 										itemButton.droprate = v[5]
+									end
+
+									local boss = AtlasLoot_GetWishListSubheadingBoss(wishDataID)
+									if boss then
+										extraFrame:SetText(extra .. " - "..boss)
 									end
 								end
 							end
